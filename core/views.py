@@ -1,8 +1,9 @@
-from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated
+from rest_framework import generics, status
 import sys
 sys.path.append("..")
 from core.serializers import *
+import requests
+from rest_framework.response import Response
 
 
 ##########################################################
@@ -19,7 +20,6 @@ class base_list(generics.ListCreateAPIView):
         return self.create(request, *args, **kwargs)
 
     """
-    permission_classes = (IsAuthenticated,)
     sql_string = None
     fields_dict = None
 
@@ -57,7 +57,6 @@ class base_detail(generics.RetrieveUpdateDestroyAPIView):
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
     """
-    permission_classes = (IsAuthenticated,)
     lookup_url_kwarg = 'id'
     sql_string = None
 
@@ -94,6 +93,18 @@ class ComplaintList(base_list):
                     FROM core_complaint
                     where 1=1"""
     fields_dict = {'core_level': ['id', ]}
+
+    def post(self, request, *args, **kwargs):
+        create_return = self.create(request, *args, **kwargs)
+
+        url = 'http://willianchan.pythonanywhere.com/gravidade'
+        myobj = {"texto": create_return.data['desc']}
+        return_ml = requests.post(url, json=myobj)
+        model = self.serializer_class.Meta.model
+        model.objects.filter(pk=create_return.data['id']).update(level_ml_model=return_ml.text.upper())
+        ajustado = model.objects.filter(pk=create_return.data['id'])
+
+        return Response(ajustado.values(), status=status.HTTP_201_CREATED)
 
 
 class ComplaintDetail(base_detail):

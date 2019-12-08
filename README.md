@@ -1,3 +1,7 @@
+# atualizar o dev
+heroku run python manage.py makemigrations
+heroku run python manage.py migrate
+
 #Entrar e criar o projeto no heroku
 
 #acessar o projeto criado
@@ -8,5 +12,5 @@ git add .
 git commit -m "Deploy da aplicação"
 git push -u heroku master
 
-# migrar o banco
+# atualizar o prod
 heroku run python manage.py migrate
