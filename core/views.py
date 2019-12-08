@@ -5,6 +5,7 @@ from core.serializers import *
 import requests
 from rest_framework.response import Response
 import base64
+import json
 
 
 ##########################################################
@@ -137,25 +138,26 @@ class ImageList(base_list):
                     where 1=1"""
     fields_dict = {}
 
-    # def post(self, request, *args, **kwargs):
-    #     create_return = self.create(request, *args, **kwargs)
+    def post(self, request, *args, **kwargs):
+        create_return = self.create(request, *args, **kwargs)
 
-        # url = 'https://177.67.49.218/powerai-vision-ingram/api/dlapis/ab043177-91a0-4727-8f42-f77a282a13b9'
-        # file_base64 = create_return.data['image']
-        #
-        # try:
-        #     file_content = base64.b64decode(file_base64)
-        #     with open(file_content, "w+") as f:
-        #         myobj = {"files": f}
-        #         return_ml = requests.post(url, files=myobj)
-        #         model = self.serializer_class.Meta.model
-        #         model.objects.filter(pk=create_return.data['id']).update(appropriate=return_ml.text.upper())
-        #         ajustado = model.objects.filter(pk=create_return.data['id'])
-        # except Exception as e:
-        #     print(str(e))
-        #
-        #
-        # return Response(ajustado.values(), status=status.HTTP_201_CREATED)
+        url = 'https://177.67.49.218/powerai-vision-ingram/api/dlapis/ab043177-91a0-4727-8f42-f77a282a13b9'
+        file_base64 = create_return.data['image']
+
+        try:
+            file_base64 = file_base64[file_base64.find(',') + 1:]
+            with open("imageToSave.png", "wb") as fh:
+                fh.write(base64.b64decode(file_base64))
+            myobj = {"files": open('imageToSave.png', 'rb')}
+            return_ml = requests.post(url, files=myobj, verify=False)
+            model = self.serializer_class.Meta.model
+            r = list(json.loads(return_ml.text)['classified'].keys())[0].upper()
+            retorno_api = r if return_ml.status_code == 200 else 'ERRO'
+            model.objects.filter(pk=create_return.data['id']).update(appropriate=retorno_api)
+            ajustado = model.objects.filter(pk=create_return.data['id'])
+            return Response(ajustado.values(), status=status.HTTP_201_CREATED)
+        except Exception as e:
+            print(str(e))
 
 
 class ImageDetail(base_detail):
