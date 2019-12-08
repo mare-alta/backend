@@ -9,4 +9,6 @@ urlpatterns = [
     path('complaint/', views.ComplaintDetail.as_view()),
     path('answers/', views.AnswerList.as_view()),
     path('answer/', views.AnswerDetail.as_view()),
+    path('images/', views.ImageList.as_view()),
+    path('image/', views.ImageDetail.as_view()),
 ]

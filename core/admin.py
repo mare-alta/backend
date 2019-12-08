@@ -15,6 +15,11 @@ class AnswerAdmin(admin.ModelAdmin):
     list_display = ['id', 'complaint', 'verified', 'insert_date']
 
 
+class ImageAdmin(admin.ModelAdmin):
+    list_display = ['id', 'complaint', 'appropriate', 'insert_date']
+
+
 admin.site.register(Level, LevelAdmin)
 admin.site.register(Complaint, ComplaintAdmin)
 admin.site.register(Answer, AnswerAdmin)
+admin.site.register(Image, ImageAdmin)

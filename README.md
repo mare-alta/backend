@@ -1,6 +1,6 @@
 # atualizar o dev
-heroku run python manage.py makemigrations
-heroku run python manage.py migrate
+python manage.py makemigrations
+python manage.py migrate
 
 #Entrar e criar o projeto no heroku
 

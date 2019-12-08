@@ -4,6 +4,7 @@ sys.path.append("..")
 from core.serializers import *
 import requests
 from rest_framework.response import Response
+import base64
 
 
 ##########################################################
@@ -127,3 +128,38 @@ class AnswerDetail(base_detail):
     sql_string = """SELECT core_answer.id
                     FROM core_answer
                     where core_answer.id = {}"""
+
+
+class ImageList(base_list):
+    serializer_class = ImageSerializer
+    sql_string = """SELECT core_image.*
+                    FROM core_image
+                    where 1=1"""
+    fields_dict = {}
+
+    # def post(self, request, *args, **kwargs):
+    #     create_return = self.create(request, *args, **kwargs)
+
+        # url = 'https://177.67.49.218/powerai-vision-ingram/api/dlapis/ab043177-91a0-4727-8f42-f77a282a13b9'
+        # file_base64 = create_return.data['image']
+        #
+        # try:
+        #     file_content = base64.b64decode(file_base64)
+        #     with open(file_content, "w+") as f:
+        #         myobj = {"files": f}
+        #         return_ml = requests.post(url, files=myobj)
+        #         model = self.serializer_class.Meta.model
+        #         model.objects.filter(pk=create_return.data['id']).update(appropriate=return_ml.text.upper())
+        #         ajustado = model.objects.filter(pk=create_return.data['id'])
+        # except Exception as e:
+        #     print(str(e))
+        #
+        #
+        # return Response(ajustado.values(), status=status.HTTP_201_CREATED)
+
+
+class ImageDetail(base_detail):
+    serializer_class = ImageSerializer
+    sql_string = """SELECT core_image.id
+                    FROM core_image
+                    where core_image.id = {}"""
