@@ -3,8 +3,10 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('Levels/', views.LevelList.as_view()),
-    path('Level/', views.LevelDetail.as_view()),
-    path('Complaints/', views.ComplaintList.as_view()),
-    path('Complaint/', views.ComplaintDetail.as_view()),
+    path('levels/', views.LevelList.as_view()),
+    path('level/', views.LevelDetail.as_view()),
+    path('complaints/', views.ComplaintList.as_view()),
+    path('complaint/', views.ComplaintDetail.as_view()),
+    path('answers/', views.AnswerList.as_view()),
+    path('answer/', views.AnswerDetail.as_view()),
 ]

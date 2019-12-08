@@ -2,7 +2,7 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 import sys
 sys.path.append("..")
-from core.serializers import LevelSerializer, ComplaintSerializer
+from core.serializers import *
 
 
 ##########################################################
@@ -101,3 +101,18 @@ class ComplaintDetail(base_detail):
     sql_string = """SELECT core_complaint.id
                     FROM core_complaint
                     where core_complaint.id = {}"""
+
+
+class AnswerList(base_list):
+    serializer_class = AnswerSerializer
+    sql_string = """SELECT core_answer.*
+                    FROM core_answer
+                    where 1=1"""
+    fields_dict = {}
+
+
+class AnswerDetail(base_detail):
+    serializer_class = AnswerSerializer
+    sql_string = """SELECT core_answer.id
+                    FROM core_answer
+                    where core_answer.id = {}"""
